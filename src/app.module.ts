@@ -4,7 +4,8 @@ import { ConvertModule } from './convert/convert.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
 import { CurrenciesModule } from './currencies/currencies.module';
-import { Currencies } from './currencies/currencies.model';
+import { Currency } from './currencies/currencies.model';
+import { Convert } from './convert/convert.model';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { Currencies } from './currencies/currencies.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [Currencies],
+      models: [Currency, Convert],
       autoLoadModels: true,
     }),
     CurrenciesModule,
