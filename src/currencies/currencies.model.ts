@@ -1,6 +1,7 @@
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 import { Convert } from '../convert/convert.model';
+import { CurrencyTable } from '../table/table.model';
 
 interface CurrencyCreationAttrs {
   code: string;
@@ -35,4 +36,7 @@ export class Currency extends Model<Currency, CurrencyCreationAttrs> {
 
   @HasMany(() => Convert)
   convert: Convert[];
+
+  @HasMany(() => CurrencyTable)
+  quotes: CurrencyTable[];
 }

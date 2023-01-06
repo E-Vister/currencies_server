@@ -11,7 +11,7 @@ export class CurrenciesController {
   @ApiOperation({ summary: 'Get currencies list' })
   @ApiResponse({ status: 200, type: [Currency] })
   @Get()
-  getAll(): any {
+  getAll() {
     return this.currenciesService.getAll();
   }
 }

@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { CurrenciesModule } from './currencies/currencies.module';
 import { Currency } from './currencies/currencies.model';
 import { Convert } from './convert/convert.model';
+import { TableModule } from './table/table.module';
+import { CurrencyTable } from './table/table.model';
 
 @Module({
   imports: [
@@ -21,10 +23,11 @@ import { Convert } from './convert/convert.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [Currency, Convert],
+      models: [Currency, Convert, CurrencyTable],
       autoLoadModels: true,
     }),
     CurrenciesModule,
+    TableModule,
   ],
   controllers: [],
   providers: [],

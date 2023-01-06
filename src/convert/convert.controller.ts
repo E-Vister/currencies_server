@@ -2,7 +2,7 @@ import { Controller, Post, Body } from '@nestjs/common';
 import { ConvertService } from './convert.service';
 import { ConvertDto } from './dto/convert.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Convert, ConvertResponse } from './convert.model';
+import { ConvertResponse } from './convert.model';
 
 @ApiTags('Convert')
 @Controller('convert')
