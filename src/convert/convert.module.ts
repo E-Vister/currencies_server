@@ -4,11 +4,12 @@ import { ConvertController } from './convert.controller';
 import { HttpModule } from '@nestjs/axios';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Currency } from '../currencies/currencies.model';
-import { Convert } from './convert.model';
+import { Quotes } from '../quotes/quotes.model';
+import { QuotesService } from '../quotes/quotes.service';
 
 @Module({
-  imports: [HttpModule, SequelizeModule.forFeature([Currency, Convert])],
-  providers: [ConvertService],
+  imports: [HttpModule, SequelizeModule.forFeature([Currency, Quotes])],
+  providers: [ConvertService, QuotesService],
   controllers: [ConvertController],
 })
 export class ConvertModule {}

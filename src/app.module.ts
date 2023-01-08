@@ -5,14 +5,15 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
 import { CurrenciesModule } from './currencies/currencies.module';
 import { Currency } from './currencies/currencies.model';
-import { Convert } from './convert/convert.model';
-import { TableModule } from './table/table.module';
-import { CurrencyTable } from './table/table.model';
+import { QuotesModule } from './quotes/quotes.module';
+import { Quotes } from './quotes/quotes.model';
 
 @Module({
   imports: [
     HttpModule,
     ConvertModule,
+    CurrenciesModule,
+    QuotesModule,
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
     }),
@@ -23,11 +24,9 @@ import { CurrencyTable } from './table/table.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [Currency, Convert, CurrencyTable],
+      models: [Currency, Quotes],
       autoLoadModels: true,
     }),
-    CurrenciesModule,
-    TableModule,
   ],
   controllers: [],
   providers: [],

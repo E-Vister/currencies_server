@@ -3,14 +3,15 @@ import { HttpService } from '@nestjs/axios';
 import { map } from 'rxjs';
 import { InjectModel } from '@nestjs/sequelize';
 import { Currency } from '../currencies/currencies.model';
-import { CurrencyTable } from './table.model';
+import { Quotes } from './quotes.model';
+import { ConvertDto } from '../convert/dto/convert.dto';
 
 @Injectable()
-export class TableService {
+export class QuotesService {
   constructor(
     private readonly httpService: HttpService,
-    @InjectModel(CurrencyTable)
-    private currencyTableRepository: typeof CurrencyTable,
+    @InjectModel(Quotes)
+    private quotesRepository: typeof Quotes,
     @InjectModel(Currency) private currenciesRepository: typeof Currency,
   ) {}
 
@@ -29,7 +30,7 @@ export class TableService {
 
       return currency.quotes.map((item, index) => {
         return {
-          key: item.id,
+          key: index + 1,
           cname: currenciesNames[index],
           ccode: item.quoteName.slice(3),
           quote: item.quote,
@@ -40,7 +41,11 @@ export class TableService {
     }
   }
 
-  async cacheTable(source: string): Promise<any> {
+  async cacheTable(
+    source: string,
+    convert = false,
+    dto: ConvertDto = null,
+  ): Promise<any> {
     const date = new Date().toISOString().split('T')[0];
     const currencies = (
       await this.currenciesRepository.findAll({ attributes: ['code'] })
@@ -71,27 +76,27 @@ export class TableService {
           };
         });
 
-        const createdQuotes = await this.currencyTableRepository.bulkCreate(
-          quotes,
-          {
-            ignoreDuplicates: true,
-          },
-        );
-
-        const currenciesNames = (
-          await this.currenciesRepository.findAll({
-            attributes: ['name'],
-          })
-        ).map((i) => i.name);
-
-        return createdQuotes.map((item, index) => {
-          return {
-            key: item.id,
-            cname: currenciesNames[index],
-            ccode: item.quoteName.slice(3),
-            quote: item.quote,
-          };
+        const createdQuotes = await this.quotesRepository.bulkCreate(quotes, {
+          ignoreDuplicates: true,
         });
+
+        if (convert) {
+          const [{ quoteName, quote }] = createdQuotes.filter(
+            (i) => i.quoteName === `${dto.from}${dto.to}`,
+          );
+
+          return {
+            key: dto.from,
+            amount: dto.amount,
+            convert: {
+              to: quoteName.slice(3),
+              quote,
+              result: dto.amount * Number(quote),
+            },
+          };
+        } else {
+          return await this.getOne(source);
+        }
       }),
     );
   }

@@ -1,31 +1,33 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConvertService } from './convert.service';
-import { Currency } from '../currencies/currencies.model';
+import { QuotesService } from './quotes.service';
 import { getModelToken } from '@nestjs/sequelize';
+import { Quotes } from './quotes.model';
 import { HttpModule } from '@nestjs/axios';
+import { Currency } from "../currencies/currencies.model";
 
-describe('ConvertService', () => {
-  let service: ConvertService;
+describe('QuotesService', () => {
+  let service: QuotesService;
 
+  const mockQuotesRepository = {};
   const mockCurrenciesRepository = {};
-  const mockQuotesService = {};
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        ConvertService,
+        QuotesService,
+        {
+          provide: getModelToken(Quotes),
+          useValue: mockQuotesRepository,
+        },
         {
           provide: getModelToken(Currency),
           useValue: mockCurrenciesRepository,
         },
       ],
       imports: [HttpModule],
-    })
-      .overrideProvider(ConvertService)
-      .useValue(mockQuotesService)
-      .compile();
+    }).compile();
 
-    service = module.get<ConvertService>(ConvertService);
+    service = module.get<QuotesService>(QuotesService);
   });
 
   it('should be defined', () => {

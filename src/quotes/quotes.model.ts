@@ -9,17 +9,14 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { Currency } from '../currencies/currencies.model';
 
-interface CurrencyTableCreationAttrs {
+interface QuotesCreationAttrs {
   quoteName: string;
   quote: string;
   currencyId: number;
 }
 
-@Table({ tableName: 'quotes-table' })
-export class CurrencyTable extends Model<
-  CurrencyTable,
-  CurrencyTableCreationAttrs
-> {
+@Table({ tableName: 'quotes' })
+export class Quotes extends Model<Quotes, QuotesCreationAttrs> {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
@@ -31,7 +28,6 @@ export class CurrencyTable extends Model<
   @ApiProperty({
     example: 'USDBYN',
     description: 'Paired name of quote',
-    name: 'key',
   })
   @Column({ type: DataType.STRING, allowNull: false, unique: true })
   quoteName: string;
