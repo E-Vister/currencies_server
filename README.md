@@ -49,7 +49,7 @@ $ npm install
 ```
 
 - Wait for all the dependencies to be installed
-- Create environment files `.development.end` and `.production.env` similar to the `.env` file for working with the
+- Create environment files `.development.env` and `.production.env` similar to the `.env` file for working with the
   database
 
 Running the app
